@@ -2,8 +2,6 @@ package com.assignment.todoapp.services;
 
 import com.assignment.todoapp.models.Task;
 import com.assignment.todoapp.repository.TaskRespository;
-import com.assignment.todoapp.models.Task;
-import com.assignment.todoapp.repository.TaskRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +30,11 @@ public class TaskService {
     }
 
     public Task viewTask(Integer id){
-        Task t = null;
-        try{
-            t = findTask(id);
-        }catch (Exception e){
-            System.err.println(e.getMessage());
+        Task todo = taskRespository.findById(id).orElse(null);
+        if (todo != null){
+            return taskRespository.save(todo);
         }
-        return t;
+        return null;
     }
 
     public List<Task> viewAllTask(){
@@ -51,16 +47,8 @@ public class TaskService {
         return t;
     }
 
-    public Task findTask(Integer id){
-        Task todo = taskRespository.findById(id).orElse(null);
-        if (todo != null){
-            return taskRespository.save(todo);
-        }
-        return null;
-    }
-
     public Task updateTask(Task taskToUpdate, Integer id){
-        Task todo = findTask(id);
+        Task todo = taskRespository.findById(id).orElse(null);
         if (todo != null){
             todo.setTitle(taskToUpdate.getTitle());
             todo.setDescription(taskToUpdate.getDescription());
