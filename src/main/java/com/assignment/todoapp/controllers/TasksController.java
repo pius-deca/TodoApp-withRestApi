@@ -20,7 +20,7 @@ public class TasksController{
   }
 
     @PostMapping
-    public MyResponse<Task> creatTask(@RequestBody Task task, HttpServletResponse response){
+    public MyResponse<Task> creatTask(@RequestBody Task task){
         Task todo = taskService.createTask(task);
         HttpStatus status = HttpStatus.CREATED;
         String message = "Todo created successfully";
@@ -28,12 +28,12 @@ public class TasksController{
             status = HttpStatus.BAD_REQUEST;
             message = "Todo cannot be created";
         }
-        response.setStatus(status.value());
+//        response.setStatus(status.value());
         return new MyResponse<>(status, message, todo);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public MyResponse<Task> viewOneTask(@PathVariable Integer id, HttpServletResponse response){
+    public MyResponse<Task> viewOneTask(@PathVariable Integer id){
         Task todo = taskService.viewTask(id);
         HttpStatus status = HttpStatus.OK;
         String message = "Todo of id: "+id+" retrieved successfully";
@@ -41,12 +41,12 @@ public class TasksController{
             status = HttpStatus.BAD_REQUEST;
             message = "Todo does not exist";
         }
-        response.setStatus(status.value());
+//        response.setStatus(status.value());
         return new MyResponse<>(status, message, todo);
     }
 
     @GetMapping
-    public MyResponse<List<Task>> viewAllTask(HttpServletResponse response){
+    public MyResponse<List<Task>> viewAllTask(){
         List<Task> todos = taskService.viewAllTask();
         HttpStatus status = HttpStatus.OK;
         String message = "All Todo's retrieved successfully";
@@ -54,12 +54,12 @@ public class TasksController{
             status = HttpStatus.BAD_REQUEST;
             message = "No task available";
         }
-        response.setStatus(status.value());
+//        response.setStatus(status.value());
         return new MyResponse<>(status, message, todos);
     }
 
     @RequestMapping(path = "/status/{status}", method = RequestMethod.GET)
-    public MyResponse<List<Task>> viewStatus(@PathVariable String status, HttpServletResponse response){
+    public MyResponse<List<Task>> viewStatus(@PathVariable String status){
         List<Task> todos = taskService.viewByStatus(status);
         HttpStatus statusCode = HttpStatus.OK;
         String message = "All " + status + " Todo's retrieved successfully";
@@ -67,12 +67,12 @@ public class TasksController{
             statusCode = HttpStatus.BAD_REQUEST;
             message = "There is no todo that is " +status;
         }
-        response.setStatus(statusCode.value());
+//        response.setStatus(statusCode.value());
         return new MyResponse<>(statusCode, message, todos);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PATCH)
-    public MyResponse<Task> updateTask(@RequestBody Task taskToUpdate, @PathVariable Integer id,  HttpServletResponse response){
+    public MyResponse<Task> updateTask(@RequestBody Task taskToUpdate, @PathVariable Integer id){
         Task todo = taskService.updateTask(taskToUpdate, id);
         HttpStatus status = HttpStatus.OK;
         String message = "Todo of id: "+id+" updated successfully";
@@ -80,12 +80,12 @@ public class TasksController{
             status = HttpStatus.BAD_REQUEST;
             message = "Todo does not exist";
         }
-        response.setStatus(status.value());
+//        response.setStatus(status.value());
         return new MyResponse<>(status, message, todo);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public MyResponse<String> deleteTask(@PathVariable Integer id, HttpServletResponse response){
+    public MyResponse<String> deleteTask(@PathVariable Integer id){
         String todo = taskService.deleteTask(id);
         HttpStatus status = HttpStatus.OK;
         String message = "Todo of id: "+id+" deleted successfully";
@@ -93,7 +93,7 @@ public class TasksController{
             status = HttpStatus.BAD_REQUEST;
             message = "Todo does not exist or was deleted";
         }
-        response.setStatus(status.value());
+//        response.setStatus(status.value());
         return new MyResponse<>(status, message, todo);
     }
 }

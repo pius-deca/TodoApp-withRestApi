@@ -28,11 +28,11 @@ public class TaskServiceTest {
     private static Task task1;
     private static Task task2;
 
-    @InjectMocks
-    private TaskService taskService;
-
     @Mock
     private TaskRespository taskRespository;
+
+    @InjectMocks
+    private TaskService taskService;
 
     @BeforeEach
     public void setUp() {
