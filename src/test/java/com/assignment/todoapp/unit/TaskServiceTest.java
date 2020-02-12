@@ -12,17 +12,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.Optional;
-//import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -60,21 +56,20 @@ public class TaskServiceTest {
         Mockito.when(taskRespository.save(task2)).thenReturn(task2);
         assertThat(taskService.createTask(task2), is(task2));
         Mockito.verify(taskRespository, Mockito.times(1)).save(task2);
-
     }
 
     @Test
     public void a_todo_should_return_when_it_is_view(){
-        Mockito.when(taskRespository.findById(1)).thenReturn(Optional.of(task1));
+        Mockito.when(taskRespository.findById(task1.getId())).thenReturn(Optional.of(task1));
         Mockito.when(taskRespository.save(task1)).thenReturn(task1);
-        assertThat(taskService.viewTask(1), is(task1));
-        Mockito.verify(taskRespository, Mockito.times(1)).findById(1);
+        assertThat(taskService.viewTask(task1.getId()), is(task1));
+        Mockito.verify(taskRespository, Mockito.times(1)).findById(task1.getId());
         Mockito.verify(taskRespository, Mockito.times(1)).save(task1);
 
-        Mockito.when(taskRespository.findById(2)).thenReturn(Optional.of(task2));
+        Mockito.when(taskRespository.findById(task2.getId())).thenReturn(Optional.of(task2));
         Mockito.when(taskRespository.save(task2)).thenReturn(task2);
         assertThat(taskService.viewTask(2), is(task2));
-        Mockito.verify(taskRespository, Mockito.times(1)).findById(2);
+        Mockito.verify(taskRespository, Mockito.times(1)).findById(task2.getId());
         Mockito.verify(taskRespository, Mockito.times(1)).save(task2);
     }
 
@@ -96,5 +91,21 @@ public class TaskServiceTest {
     public void delete_a_todo(){
         taskService.deleteTask(task1.getId());
         Mockito.verify(taskRespository, Mockito.times(1)).existsById(task1.getId());
+    }
+
+    @Test
+    public void update_a_todo(){
+        Task newTodo = new Task("new title", "new desc");
+        Mockito.when(taskRespository.findById(task1.getId())).thenReturn(Optional.of(task1));
+        Mockito.when(taskRespository.save(task1)).thenReturn(task1);
+        assertThat(taskService.updateTask(newTodo, task1.getId()), is(task1));
+        Mockito.verify(taskRespository, Mockito.times(1)).findById(task1.getId());
+        Mockito.verify(taskRespository, Mockito.times(1)).save(task1);
+
+        Mockito.when(taskRespository.findById(task2.getId())).thenReturn(Optional.of(task2));
+        Mockito.when(taskRespository.save(task2)).thenReturn(task2);
+        assertThat(taskService.updateTask(newTodo, task2.getId()), is(task2));
+        Mockito.verify(taskRespository, Mockito.times(1)).findById(task2.getId());
+        Mockito.verify(taskRespository, Mockito.times(1)).save(task2);
     }
 }
